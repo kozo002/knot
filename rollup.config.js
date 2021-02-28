@@ -3,9 +3,15 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import scss from 'rollup-plugin-scss';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
-import css from 'rollup-plugin-css-only';
+// import css from 'rollup-plugin-css-only';
+import sass from 'sass';
+import path from 'path';
+import autoprefixer from 'autoprefixer';
+import postcss from 'postcss';
+// import alias from '@rollup/plugin-alias';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -39,8 +45,18 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		// alias({
+		// 	entries: [
+		// 		{ find: '~', replacement: './src' }
+		// 	]
+		// }),
 		svelte({
-			preprocess: sveltePreprocess({ sourceMap: !production }),
+			preprocess: sveltePreprocess({
+				sourceMap: !production,
+				scss: {
+          includePaths: [path.join(__dirname, './src/styles')]
+        },
+			}),
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production
@@ -48,7 +64,13 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
+		// css({ output: 'bundle.css' }),
+		scss({
+      // output: 'bundle.css',
+      output: 'public/build/bundle.css',
+      sass,
+      processor: () => postcss([autoprefixer])
+    }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
