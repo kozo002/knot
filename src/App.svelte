@@ -1,5 +1,6 @@
 <script lang="ts">
   import Layout from "./components/molecules/Layout.svelte";
+  import Message from "./components/organisms/Message.svelte";
   import MessageComposer from "./components/organisms/MessageComposer.svelte";
 </script>
 
@@ -11,7 +12,9 @@
   <div slot="nav-primary"></div>
   <div slot="nav-secondary"></div>
 
-  <div slot="main-content"></div>
+  <div slot="main-content">
+    <Message />
+  </div>
 
   <div slot="main-footer">
     <MessageComposer />
